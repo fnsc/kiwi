@@ -8,7 +8,7 @@ RUN set -ex; \
             apt-transport-https \
             gnupg \
             libicu-dev \
-
+            unzip \
         ; \
         rm -rf /var/lib/apt/lists/*;
 
