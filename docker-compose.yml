@@ -29,4 +29,4 @@ services:
         image: node:lts
         working_dir: /var/www/html
         volumes:
-            - ./:/var/www/html
+            - ./app:/var/www/html
