@@ -23,3 +23,10 @@ services:
             MYSQL_PASSWORD: db-password
         ports:
             - "9906:3306"
+
+    node:
+        container_name: node
+        image: node:lts
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
