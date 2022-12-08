@@ -6,32 +6,29 @@ use App\Entity\PhoneNumber;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 
 class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-         $user = new User();
-         $user->setFirstName('John');
-         $user->setLastName('Doe');
-         $user->setEmail('johnDoe@gmail.com');
+        $faker = Factory::create();
 
-         $phoneNumber = new PhoneNumber();
-         $phoneNumber->setUser($user);
-         $phoneNumber->setName('mobile');
-         $phoneNumber->setValue('9999999999');
+        for ($i = 1; $i <= 100; $i++) {
+             $user = new User();
+             $user->setFirstName($faker->firstName);
+             $user->setLastName($faker->lastName);
+             $user->setEmail($faker->email);
 
-         $manager->persist($user);
-         $manager->flush();
-         $manager->persist($phoneNumber);
-         $manager->flush();
+             $phoneNumber = new PhoneNumber();
+             $phoneNumber->setUser($user);
+             $phoneNumber->setName($faker->randomElement(['mobile', 'home', 'work']));
+             $phoneNumber->setValue($faker->phoneNumber);
 
-         $user = new User();
-         $user->setFirstName('Rick');
-         $user->setLastName('Martin');
-         $user->setEmail('rickMartin@gmail.com');
-
-         $manager->persist($user);
-         $manager->flush();
+             $manager->persist($user);
+             $manager->flush();
+             $manager->persist($phoneNumber);
+             $manager->flush();
+        }
     }
 }
