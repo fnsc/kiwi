@@ -49,11 +49,13 @@ class UserRepository extends ServiceEntityRepository
             if ($key === 0) {
                 $query = $query->andWhere('user.first_name LIKE :value')
                     ->orWhere('user.last_name LIKE :value')
+                    ->orWhere('user.email LIKE :value')
                     ->setParameter('value', '%' . $searchTerm->getTerm() . '%');
             }
 
             $query = $query->orWhere('user.first_name LIKE :value')
                     ->orWhere('user.last_name LIKE :value')
+                    ->orWhere('user.email LIKE :value')
                     ->setParameter('value', '%' . $searchTerm->getTerm() . '%');
         }
 
