@@ -2,13 +2,18 @@
 
 namespace App\Application\UserList;
 
+use App\Entity\User;
+
 class OutputBoundary
 {
-    public function __construct(private readonly array $users)
+    public function __construct(private readonly array|User $users)
     {
     }
 
-    public function getUsers(): array
+    /**
+     * @return array|User
+     */
+    public function getUsers(): array|User
     {
         return $this->users;
     }

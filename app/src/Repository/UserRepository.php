@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Domain\ValueObjects\SearchTerm;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -40,39 +41,36 @@ class UserRepository extends ServiceEntityRepository
         }
     }
 
-    public function findBySearchTerm(SearchTerm $searchTerm): array
+    public function findBySearchTerm(array $searchTerms): array
     {
-        return $this->createQueryBuilder('user')
-            ->andWhere('user.first_name LIKE :value')
-            ->orWhere('user.last_name LIKE :value')
-            ->setParameter('value', '%' . $searchTerm->getTerm() . '%')
-            ->orderBy('user.first_name', 'ASC')
+        $query = $this->createQueryBuilder('user');
+
+        foreach ($searchTerms as $key => $searchTerm) {
+            if ($key === 0) {
+                $query = $query->andWhere('user.first_name LIKE :value')
+                    ->orWhere('user.last_name LIKE :value')
+                    ->setParameter('value', '%' . $searchTerm->getTerm() . '%');
+            }
+
+            $query = $query->orWhere('user.first_name LIKE :value')
+                    ->orWhere('user.last_name LIKE :value')
+                    ->setParameter('value', '%' . $searchTerm->getTerm() . '%');
+        }
+
+        return $query->orderBy('user.first_name', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
-//    /**
-//     * @return User[] Returns an array of User objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?User
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findExact(SearchTerm $searchTerm): ?User
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.email = :value')
+            ->setParameter('value',  $searchTerm->getTerm())
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
