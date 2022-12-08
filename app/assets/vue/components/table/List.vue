@@ -18,10 +18,12 @@
 </template>
 <script>
 import {reactive} from "vue";
+import {inject} from "vue";
 import axios from "axios";
 
 export default {
   setup() {
+    const eventHandler = inject('eventHandler')
     const state = reactive({
       users: [],
       error: {
@@ -30,8 +32,13 @@ export default {
       },
     })
 
-    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-    axios.get('/api/v1/users')
+    eventHandler.on('search', (term) => {
+      fetch(term)
+    })
+
+    function fetch(term = '') {
+      axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+      axios.get(`/api/v1/users?term=${term}`)
       .then((response) => {
         state.users = response.data.users
       })
@@ -39,6 +46,9 @@ export default {
         state.error.status = true
         state.error.messages = response.data.errors
       })
+    }
+
+    fetch()
 
     return {
       state,

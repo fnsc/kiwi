@@ -1,5 +1,7 @@
 import { createApp } from "vue";
+import mitt from "mitt";
 const Vue = createApp({})
+const eventHandler = mitt()
 
 import Container from "./components/Cointainer"
 import SearchBar from "./components/SearchBar"
@@ -13,4 +15,5 @@ Vue.component('list-component', List)
 Vue.component('table-head-component', TableHead)
 Vue.component('table-row-component', TableRow)
 
+Vue.provide('eventHandler', eventHandler)
 Vue.mount('#app')

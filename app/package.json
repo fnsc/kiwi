@@ -9,6 +9,7 @@
         "bootstrap": "^5.2.3",
         "core-js": "^3.23.0",
         "lodash": "^4.17.21",
+        "mitt": "^3.0.0",
         "regenerator-runtime": "^0.13.9",
         "vue": "^3.2.45",
         "vue-loader": "^17.0.1",
