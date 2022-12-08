@@ -1,13 +1,9 @@
 <template>
   <div class="row">
-    <div class="offset-3 col-6">
+    <div class="offset-md-3 col-md-6 col-sm-12">
       <table class="table table-striped">
         <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-          </tr>
+          <table-head-component></table-head-component>
         </thead>
         <tbody>
           <table-row-component

@@ -70,8 +70,8 @@ Encore
     //.enableIntegrityHashes(Encore.isProduction())
 
     // uncomment if you're having problems with a jQuery plugin
-    .autoProvidejQuery()
-    .enableVueLoader()
+    // .autoProvidejQuery()
+    // .enableVueLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();
