@@ -12,18 +12,6 @@ class User
             'id' => $user->getId(),
             'name' => $user->getFirstName() . ' ' . $user->getLastName(),
             'email' => $user->getEmail(),
-            'phone_numbers' => $this->getPhoneNumbers($user),
         ];
-    }
-
-    private function getPhoneNumbers(UserEntity $user): array
-    {
-        $result = [];
-
-        foreach ($user->getPhoneNumbers() as $phoneNumber) {
-            $result[$phoneNumber->getName()] = $phoneNumber->getValue();
-        }
-
-        return $result;
     }
 }

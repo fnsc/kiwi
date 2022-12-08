@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Address;
 use App\Entity\PhoneNumber;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -25,10 +26,28 @@ class AppFixtures extends Fixture
              $phoneNumber->setName($faker->randomElement(['mobile', 'home', 'work']));
              $phoneNumber->setValue($faker->phoneNumber);
 
+             $address = new Address();
+             $address->setUser($user);
+             $address->setAddressLine1($faker->streetAddress);
+             $address->setAddressLine2($faker->buildingNumber);
+             $address->setCity($faker->city);
+             $address->setProvince($faker->word);
+             $address->setCountry($faker->country);
+             $address->setZipCode($faker->postcode);
+
+
              $manager->persist($user);
              $manager->flush();
-             $manager->persist($phoneNumber);
-             $manager->flush();
+
+             if (rand(0, 1) === 1) {
+                 $manager->persist($phoneNumber);
+                 $manager->flush();
+             }
+
+             if (rand(0, 1) === 1) {
+                 $manager->persist($address);
+                 $manager->flush();
+             }
         }
     }
 }

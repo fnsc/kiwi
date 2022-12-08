@@ -4,7 +4,7 @@ namespace App\Controller\Api;
 
 use App\Application\UserList\InputBoundary;
 use App\Application\UserList\Service;
-use App\Presenters\Transformers\User;
+use App\Presenters\Transformers\UserListTransformer;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,7 +17,7 @@ class UserListController extends AbstractController
 {
     public function __construct(
         private readonly Service         $service,
-        private readonly User            $transformer,
+        private readonly UserListTransformer            $transformer,
         private readonly LoggerInterface $logger
     )
     {

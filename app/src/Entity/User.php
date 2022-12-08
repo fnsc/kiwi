@@ -27,6 +27,9 @@ class User
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: PhoneNumber::class, orphanRemoval: true)]
     private Collection $phoneNumbers;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Address $address = null;
+
     public function __construct()
     {
         $this->phoneNumbers = new ArrayCollection();
@@ -99,6 +102,23 @@ class User
                 $phoneNumber->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): self
+    {
+        // set the owning side of the relation if necessary
+        if ($address->getUser() !== $this) {
+            $address->setUser($this);
+        }
+
+        $this->address = $address;
 
         return $this;
     }
