@@ -1,6 +1,6 @@
 <template>
     <div class="container custom-container d-flex flex-column">
-        <span>Hello world!</span>
+        <list-component></list-component>
     </div>
 </template>
 <script>

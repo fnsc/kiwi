@@ -5,6 +5,11 @@
  * (and its CSS file) in your base layout (base.html.twig).
  */
 
+window._ = require('lodash');
+
+// window.axios = require('axios');
+// window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 

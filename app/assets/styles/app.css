@@ -3,3 +3,7 @@
 body {
     background-color: lightgray;
 }
+
+.custom-container {
+    min-height: 100vh;
+}

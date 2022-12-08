@@ -36,9 +36,7 @@ class UserListController extends AbstractController
             }
 
             return new JsonResponse([
-                'data' => [
-                    'users' => $transformedData,
-                ],
+                'users' => $transformedData,
             ], Response::HTTP_OK);
         } catch (Exception $exception) {
             $this->logger->error('[UserList|API] Something unexpected has happened.', compact('exception'));
