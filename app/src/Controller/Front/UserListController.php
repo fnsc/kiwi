@@ -13,8 +13,6 @@ class UserListController extends AbstractController
     {
         return $this->render('user/list.html.twig', [
             'title' => 'Users List',
-            'description' => 'Your awesome users list.',
-            'author' => 'Gabriel Fonseca',
         ]);
     }
 }
