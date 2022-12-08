@@ -34,7 +34,10 @@ export default {
 
     eventHandler.on('search', (term) => {
       fetch(term)
+    })
 
+    eventHandler.on('order-by', (order) => {
+      orderUsers(order)
     })
 
     function fetch(term = '') {
@@ -47,6 +50,52 @@ export default {
         state.error.status = true
         state.error.messages = response.data.errors
       })
+    }
+
+    function orderUsers(order = 0) {
+      if (order.orientation === 0) {
+        state.users.sort((a, b) => {
+            if (a.name > b.name) {
+              return 1
+            }
+
+            if (a.name < b.name) {
+              return -1
+            }
+
+            return 0
+        })
+
+        return
+      }
+
+      if (order.orientation === 1) {
+        state.users.sort((a, b) => {
+            if (a[order.field] > b[order.field]) {
+              return 1
+            }
+
+            if (a[order.field] < b[order.field]) {
+              return -1
+            }
+
+            return 0
+        })
+
+        return
+      }
+
+      state.users.sort((a, b) => {
+          if (a[order.field] < b[order.field]) {
+            return 1
+          }
+
+          if (a[order.field] > b[order.field]) {
+            return -1
+          }
+
+          return 0
+        })
     }
 
     fetch()
