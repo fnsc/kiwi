@@ -4,10 +4,10 @@ namespace App\Tests\Unit\src\Application\UserList;
 
 use App\Application\UserList\InputBoundary;
 use App\Application\UserList\OutputBoundary;
+use App\Application\UserList\SearchEngines\SearchEnginesManager;
 use App\Application\UserList\Service;
 use App\Domain\ValueObjects\SearchTerm;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -16,18 +16,18 @@ class ServiceTest extends TestCase
     public function testShouldHandle(): void
     {
         // Set
-        $userRepository = $this->createMock(UserRepository::class);
+        $searchEngineManager = $this->createMock(SearchEnginesManager::class);
         $input = new InputBoundary('john');
         $searchTerm = new SearchTerm('john');
-        $service = new Service($userRepository);
+        $service = new Service($searchEngineManager);
         $user = new User();
         $user->setFirstName('John');
         $user->setLastName('Doe');
         $user->setEmail('johnDoe@gmail.com');
 
         // Expectations
-        $userRepository->expects($this->once())
-            ->method('findBySearchTerm')
+        $searchEngineManager->expects($this->once())
+            ->method('search')
             ->with($searchTerm)
             ->willReturn([$user]);
 
@@ -35,19 +35,19 @@ class ServiceTest extends TestCase
         $result = $service->handle($input);
 
         // Assertions
-        $user = current($result->getUsers());
+        $user = $result->getUsers()[0];
         $this->assertInstanceOf(OutputBoundary::class, $result);
-        $this->assertInstanceOf(User::class, $result->getUsers()[0]);
+        $this->assertInstanceOf(User::class, $user);
         $this->assertSame('John', $user->getFirstName());
     }
 
     public function testShouldThrowAnExceptionWhenRepositoryFails(): void
     {
         // Set
-        $userRepository = $this->createMock(UserRepository::class);
+        $searchEngineManager = $this->createMock(SearchEnginesManager::class);
         $input = new InputBoundary('john');
         $searchTerm = new SearchTerm('john');
-        $service = new Service($userRepository);
+        $service = new Service($searchEngineManager);
         $user = new User();
         $user->setFirstName('John');
         $user->setLastName('Doe');
@@ -55,8 +55,8 @@ class ServiceTest extends TestCase
         $exception = new Exception('Something unexpected');
 
         // Expectations
-        $userRepository->expects($this->once())
-            ->method('findBySearchTerm')
+        $searchEngineManager->expects($this->once())
+            ->method('search')
             ->with($searchTerm)
             ->willThrowException($exception);
 
