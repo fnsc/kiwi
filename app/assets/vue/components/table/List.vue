@@ -34,6 +34,7 @@ export default {
 
     eventHandler.on('search', (term) => {
       fetch(term)
+
     })
 
     function fetch(term = '') {
