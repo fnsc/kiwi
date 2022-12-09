@@ -12,6 +12,11 @@ body {
     cursor: pointer;
 }
 
+span.table-header-clickable:hover {
+    text-decoration: underline;
+    color: #3D87F3;
+}
+
 label {
     font-weight: bold;
     margin-right: 5px;

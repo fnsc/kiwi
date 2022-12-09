@@ -8,13 +8,13 @@
         </div>
         <div class="modal-body container-fluid">
           <div class="row">
-            <div class="col-md-12 col-lg-4">
+            <div class="col-md-12 col-lg-6">
               <label>Email: </label>
               <span>
                 <a :href="`mailto:${state.user.email}`" v-text="state.user.email"></a>
               </span>
             </div>
-            <div class="col-md-12 col-lg-4" v-if="state.user.phone_numbers.length" v-for="phone_number in state.user.phone_numbers">
+            <div class="col-md-12 col-lg-6" v-if="state.user.phone_numbers.length" v-for="phone_number in state.user.phone_numbers">
               <label v-text="`${phone_number.name}: `"></label>
               <span>
                 <a :href="`tel:${phone_number.value}`" v-text="phone_number.value"></a>

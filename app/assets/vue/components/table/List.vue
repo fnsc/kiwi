@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="offset-md-3 col-md-6 col-sm-12">
-      <table class="table table-striped">
+      <table class="table table-hover">
         <thead>
           <table-head-component></table-head-component>
         </thead>
