@@ -16,11 +16,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserListController extends AbstractController
 {
     public function __construct(
-        private readonly Service         $service,
-        private readonly UserListTransformer            $transformer,
-        private readonly LoggerInterface $logger
-    )
-    {
+        private readonly Service             $service,
+        private readonly UserListTransformer $transformer,
+        private readonly LoggerInterface     $logger
+    ) {
     }
 
     #[Route('api/v1/users')]

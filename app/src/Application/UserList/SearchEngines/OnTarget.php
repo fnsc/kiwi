@@ -7,9 +7,7 @@ use App\Repository\UserRepository;
 
 class OnTarget
 {
-    public function __construct(
-        private readonly UserRepository $userRepository
-    )
+    public function __construct(private readonly UserRepository $userRepository)
     {
     }
 
