@@ -11,3 +11,8 @@ body {
 .table-header-clickable:hover {
     cursor: pointer;
 }
+
+label {
+    font-weight: bold;
+    margin-right: 5px;
+}

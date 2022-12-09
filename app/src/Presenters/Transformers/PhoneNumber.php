@@ -12,6 +12,9 @@ class PhoneNumber
             return [];
         }
 
-        return [$phoneNumber->getName() => $phoneNumber->getValue()];
+        return [
+            'name' => ucfirst(strtolower($phoneNumber->getName())),
+            'value'=> $phoneNumber->getValue()
+        ];
     }
 }
