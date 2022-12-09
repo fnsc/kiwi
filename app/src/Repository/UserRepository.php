@@ -66,15 +66,13 @@ class UserRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function findExact(SearchTerm $searchTerm): ?User
+    public function findExact(SearchTerm $searchTerm): array
     {
         return $this->createQueryBuilder('user')
-            ->andWhere('user.email = :value')
-            ->setParameter('value',  $searchTerm->getTerm())
+            ->andWhere('user.first_name = :value')
+            ->setParameter('value', $searchTerm->getTerm() . '%')
+            ->orderBy('user.first_name', 'ASC')
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getResult();
     }
 }

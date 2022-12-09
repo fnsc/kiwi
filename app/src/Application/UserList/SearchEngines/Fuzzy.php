@@ -13,14 +13,21 @@ class Fuzzy
 
     public function find(SearchTerm $searchTerm): array
     {
-        $terms = explode(' ', $searchTerm->getTerm());
+        $searchTerms = $this->getSearchTerms($searchTerm);
+
+        return $this->userRepository->findBySearchTerm($searchTerms);
+    }
+
+    private function getSearchTerms(SearchTerm $searchTerm): array
+    {
         $searchTerms = [];
+        $terms = explode(' ', $searchTerm->getTerm());
 
         foreach ($terms as $term) {
             $searchTerms[] = $this->buildSearchTerm($term);
         }
 
-        return $this->userRepository->findBySearchTerm($searchTerms);
+        return $searchTerms;
     }
 
     private function buildSearchTerm(string $term): SearchTerm
