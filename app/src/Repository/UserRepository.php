@@ -49,7 +49,6 @@ class UserRepository extends ServiceEntityRepository
             if ($key === 0) {
                 $query = $query->andWhere('user.first_name LIKE :value')
                     ->orWhere('user.last_name LIKE :value')
-                    ->orWhere('user.email LIKE :value')
                     ->setParameter('value', '%' . $searchTerm->getTerm() . '%');
 
                 continue;
@@ -57,7 +56,6 @@ class UserRepository extends ServiceEntityRepository
 
             $query = $query->orWhere('user.first_name LIKE :value')
                     ->orWhere('user.last_name LIKE :value')
-                    ->orWhere('user.email LIKE :value')
                     ->setParameter('value', '%' . $searchTerm->getTerm() . '%');
         }
 
@@ -69,7 +67,7 @@ class UserRepository extends ServiceEntityRepository
     public function findExact(SearchTerm $searchTerm): array
     {
         return $this->createQueryBuilder('user')
-            ->andWhere('user.first_name = :value')
+            ->andWhere('user.first_name LIKE :value')
             ->setParameter('value', $searchTerm->getTerm() . '%')
             ->orderBy('user.first_name', 'ASC')
             ->getQuery()
