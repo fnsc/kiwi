@@ -129,16 +129,6 @@ class UserListTransformerTest extends TestCase
                      );
 
         $iteratorMock->expects($this->any())
-                     ->method('key')
-                     ->will(
-                         $this->returnCallback(
-                             function() use ($iteratorData) {
-                                 return $iteratorData->position;
-                             }
-                         )
-                     );
-
-        $iteratorMock->expects($this->any())
                      ->method('next')
                      ->will(
                          $this->returnCallback(
