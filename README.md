@@ -1,36 +1,34 @@
-You will need Docker and Docker Compose to use this. You can install Docker for Windows which includes Docker Compose or if you have a linux environment install it there.
+## Stack
+- [PHP 8.1](https://www.php.net);
+- [Symfony](https://symfony.com/);
+- [PHPUnit](https://phpunit.de/);
+- [Docker](https://docker.com);
 
-Place these files in a directory and from that directory you can run the following commands to interact with the containers. 
+## Running the Application Locally
+Steps:
+1. ```shell
+   git clone git@github.com:fnsc/kiwi.git
+   ```
+1. ```shell
+   docker-compose build web --no-cache
+   ```
+1. ```shell
+   docker-compose run web composer install
+   ```
+1. ```shell
+   docker-compose up web -d
+   ```
+1. ```shell
+   docker-compose web symfony console doctrine:migrations:migrate
+   ```
+1. ```shell
+   docker-compose web symfony console doctrine:fixtures:load
+   ```
+1. ```shell
+   docker-compose run node yarn install
+   ```
+1. ```shell
+   docker-compose run node yarn dev
+   ```
 
-To launch the two containers run:
-
-    docker-compose up 
-
-You can add the `-d` flag to put it in the background if you don't want to watch the output
-
-To stop it run:
-
-    docker-compose stop
-
-To enter the php apache container to run symfony CLI commands:
-
-    docker-compose exec php-apache-environment /bin/bash
-
-Setup your git user: 
-
-    git config --global user.email "you@example.com"
-    git config --global user.name "Your Name"
-
-Install Symfony: 
-
-    symfony new . --webapp
-
-Once it is installed you can reach the default symfony intro page at:
-
-    http://localhost:7171/
-
-To connect to the database you will need to use this url in the symfony `.env` file:
-
-    DATABASE_URL="mysql://db-user:db-password@db:3306/symfony?serverVersion=8&charset=utf8mb4"
-
-The code will be accessible from the `app` folder that will be created by the containers starting up.
+Finally access [http://localhost:7171](http://localhost:7171).

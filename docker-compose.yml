@@ -1,13 +1,11 @@
 version: '3.8'
 services:
-    php-apache-environment:
-        container_name: php-apache
+    web:
         build:
             context: .
             dockerfile: Dockerfile
         ports:
             - "7171:80"
-        container_name: code-assignment
         volumes:
             - ./app:/var/www/html
         depends_on:
