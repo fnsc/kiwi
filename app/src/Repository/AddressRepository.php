@@ -39,20 +39,17 @@ class AddressRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Address[] Returns an array of Address objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Address[] Returns an array of Address objects
+     */
+    public function findByUniqueCountries(): array
+    {
+        return $this->createQueryBuilder('address')
+            ->distinct('address.country')
+            ->orderBy('address.country', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
 //    public function findOneBySomeField($value): ?Address
 //    {

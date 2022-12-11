@@ -3,7 +3,7 @@
 namespace App\Tests\Unit\src\Application\UserList\SearchEngines;
 
 use App\Application\UserList\SearchEngines\Fuzzy;
-use App\Domain\ValueObjects\SearchTerm;
+use App\Domain\ValueObjects\Filter;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Mockery as m;
@@ -16,7 +16,7 @@ class FuzzyTest extends TestCase
         // Set
         $userRepository = $this->createMock(UserRepository::class);
         $fuzzyEngine = new Fuzzy($userRepository);
-        $searchTerm = new SearchTerm('john doe');
+        $searchTerm = new Filter('john doe');
 
         $user = m::mock(User::class);
         $expected = [$user];
@@ -24,7 +24,7 @@ class FuzzyTest extends TestCase
         // Expectations
         $userRepository->expects($this->once())
             ->method('findBySearchTerm')
-            ->with([new SearchTerm('john'), new SearchTerm('doe')])
+            ->with([new Filter('john'), new Filter('doe')])
             ->willReturn([$user]);
 
         // Action

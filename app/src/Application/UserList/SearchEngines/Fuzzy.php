@@ -2,7 +2,7 @@
 
 namespace App\Application\UserList\SearchEngines;
 
-use App\Domain\ValueObjects\SearchTerm;
+use App\Domain\ValueObjects\Filter;
 use App\Repository\UserRepository;
 
 class Fuzzy
@@ -11,17 +11,17 @@ class Fuzzy
     {
     }
 
-    public function find(SearchTerm $searchTerm): array
+    public function find(Filter $searchTerm): array
     {
         $searchTerms = $this->getSearchTerms($searchTerm);
 
         return $this->userRepository->findBySearchTerm($searchTerms);
     }
 
-    private function getSearchTerms(SearchTerm $searchTerm): array
+    private function getSearchTerms(Filter $searchTerm): array
     {
         $searchTerms = [];
-        $terms = explode(' ', $searchTerm->getTerm());
+        $terms = explode(' ', $searchTerm->getValue());
 
         foreach ($terms as $term) {
             $searchTerms[] = $this->buildSearchTerm($term);
@@ -30,8 +30,8 @@ class Fuzzy
         return $searchTerms;
     }
 
-    private function buildSearchTerm(string $term): SearchTerm
+    private function buildSearchTerm(string $term): Filter
     {
-        return new SearchTerm($term);
+        return new Filter($term);
     }
 }

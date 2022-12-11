@@ -2,7 +2,7 @@
 
 namespace App\Application\UserList\SearchEngines;
 
-use App\Domain\ValueObjects\SearchTerm;
+use App\Domain\ValueObjects\Filter;
 use App\Repository\UserRepository;
 
 class OnTarget
@@ -12,11 +12,28 @@ class OnTarget
     }
 
     /**
-     * @param SearchTerm $searchTerm
+     * @param array<Filter> $filters
      * @return array
      */
-    public function find(SearchTerm $searchTerm): array
+    public function find(array $filters): array
     {
-        return $this->userRepository->findExact($searchTerm);
+        $hasCountryFilter = false;
+
+        foreach ($filters as $filter) {
+            if ('country' === $filter->getName() && !empty($filter->getValue())) {
+                $hasCountryFilter = true;
+            }
+        }
+
+
+        if (!$hasCountryFilter) {
+            $filterByTerm = array_filter($filters, function ($filter) {
+                return $filter->getName() === 'term';
+            });
+
+            return $this->userRepository->findExact($filterByTerm[0]);
+        }
+
+        return $this->userRepository->findExactWithCountry($filters);
     }
 }

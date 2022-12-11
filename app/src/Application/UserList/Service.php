@@ -3,7 +3,7 @@
 namespace App\Application\UserList;
 
 use App\Application\UserList\SearchEngines\SearchEnginesManager;
-use App\Domain\ValueObjects\SearchTerm;
+use App\Domain\ValueObjects\Filter;
 
 class Service
 {
@@ -17,8 +17,9 @@ class Service
      */
     public function handle(InputBoundary $input): OutputBoundary
     {
-        $searchTerm = new SearchTerm($input->getTerm());
-        $result = $this->searchEngine->search($searchTerm);
+        $searchTerm = new Filter('term', $input->getTerm());
+        $countryFilter = new Filter('country', $input->getCountry());
+        $result = $this->searchEngine->search([$searchTerm, $countryFilter]);
 
         return new OutputBoundary($result);
     }

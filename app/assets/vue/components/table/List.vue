@@ -1,6 +1,5 @@
 <template>
-  <div class="row">
-    <div class="offset-md-3 col-md-6 col-sm-12">
+    <div class="col-md-9 col-sm-12">
       <table class="table table-hover">
         <thead>
           <table-head-component></table-head-component>
@@ -14,7 +13,6 @@
         </tbody>
       </table>
     </div>
-  </div>
 </template>
 <script>
 import {reactive} from "vue";
@@ -26,6 +24,9 @@ export default {
     const eventHandler = inject('eventHandler')
     const state = reactive({
       users: [],
+      filters: {
+        country: ''
+      },
       error: {
         status: false,
         messages: []
@@ -40,9 +41,20 @@ export default {
       orderUsers(order)
     })
 
+    eventHandler.on('filter-by-country', (country) => {
+      console.log('hello from list' + country)
+      state.filters.country = country
+
+      fetch()
+    })
+
     function fetch(term = '') {
       axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-      axios.get(`/api/v1/users?term=${term}`)
+      let url = `/api/v1/users?term=${term}`;
+
+      url += state.filters.country.length ? `&country=${state.filters.country}` : ''
+
+      axios.get(url)
       .then((response) => {
         state.users = response.data.users
       })

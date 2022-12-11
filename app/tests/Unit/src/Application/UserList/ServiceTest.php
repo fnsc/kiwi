@@ -6,7 +6,7 @@ use App\Application\UserList\InputBoundary;
 use App\Application\UserList\OutputBoundary;
 use App\Application\UserList\SearchEngines\SearchEnginesManager;
 use App\Application\UserList\Service;
-use App\Domain\ValueObjects\SearchTerm;
+use App\Domain\ValueObjects\Filter;
 use App\Entity\User;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +18,7 @@ class ServiceTest extends TestCase
         // Set
         $searchEngineManager = $this->createMock(SearchEnginesManager::class);
         $input = new InputBoundary('john');
-        $searchTerm = new SearchTerm('john');
+        $searchTerm = new Filter('john');
         $service = new Service($searchEngineManager);
         $user = new User();
         $user->setFirstName('John');
@@ -46,7 +46,7 @@ class ServiceTest extends TestCase
         // Set
         $searchEngineManager = $this->createMock(SearchEnginesManager::class);
         $input = new InputBoundary('john');
-        $searchTerm = new SearchTerm('john');
+        $searchTerm = new Filter('john');
         $service = new Service($searchEngineManager);
         $user = new User();
         $user->setFirstName('John');

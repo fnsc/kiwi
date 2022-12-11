@@ -5,7 +5,7 @@ namespace App\Tests\Unit\src\Application\UserList\SearchEngines;
 use App\Application\UserList\SearchEngines\Fuzzy;
 use App\Application\UserList\SearchEngines\OnTarget;
 use App\Application\UserList\SearchEngines\SearchEnginesManager;
-use App\Domain\ValueObjects\SearchTerm;
+use App\Domain\ValueObjects\Filter;
 use App\Entity\User;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +20,7 @@ class SearchEnginesManagerTest extends TestCase
         $searchEngineManager = new SearchEnginesManager($fuzzy, $onTarget);
         $user = m::mock(User::class);
 
-        $searchTerm = new SearchTerm('john doe');
+        $searchTerm = new Filter('john doe');
 
         // Expectations
         $onTarget->expects($this->once())

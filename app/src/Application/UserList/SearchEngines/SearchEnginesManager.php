@@ -2,7 +2,7 @@
 
 namespace App\Application\UserList\SearchEngines;
 
-use App\Domain\ValueObjects\SearchTerm;
+use App\Domain\ValueObjects\Filter;
 use App\Entity\User;
 
 class SearchEnginesManager
@@ -14,13 +14,13 @@ class SearchEnginesManager
     }
 
     /**
-     * @param SearchTerm $searchTerm
+     * @param array $filters
      * @return array
      */
-    public function search(SearchTerm $searchTerm): array
+    public function search(array $filters): array
     {
-        $onTargetResult = $this->onTarget->find($searchTerm);
-        $fuzzyResult = $this->fuzzy->find($searchTerm);
+        $onTargetResult = $this->onTarget->find($filters);
+        $fuzzyResult = $this->fuzzy->find($filters);
 
         return $this->getUniqueResult([...$onTargetResult, ...$fuzzyResult]);
     }

@@ -2,10 +2,11 @@
 
 namespace App\Repository;
 
-use App\Domain\ValueObjects\SearchTerm;
+use App\Domain\ValueObjects\Filter;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -41,6 +42,10 @@ class UserRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param array<Filter> $searchTerms
+     * @return array
+     */
     public function findBySearchTerm(array $searchTerms): array
     {
         $query = $this->createQueryBuilder('user');
@@ -49,18 +54,18 @@ class UserRepository extends ServiceEntityRepository
             if ($key === 0) {
                 $query = $query->andWhere('user.first_name LIKE :value')
                     ->orWhere('user.last_name LIKE :value')
-                    ->setParameter('value', '%' . $searchTerm->getTerm() . '%')
+                    ->setParameter('value', '%' . $searchTerm->getValue() . '%')
                     ->orWhere('user.id = :value')
-                    ->setParameter('value', $searchTerm->getTerm());
+                    ->setParameter('value', $searchTerm->getValue());
 
                 continue;
             }
 
             $query = $query->orWhere('user.first_name LIKE :value')
                     ->orWhere('user.last_name LIKE :value')
-                    ->setParameter('value', '%' . $searchTerm->getTerm() . '%')
+                    ->setParameter('value', '%' . $searchTerm->getValue() . '%')
                     ->orWhere('user.id = :value')
-                    ->setParameter('value', $searchTerm->getTerm());
+                    ->setParameter('value', $searchTerm->getValue());
         }
 
         return $query->orderBy('user.first_name', 'ASC')
@@ -68,12 +73,41 @@ class UserRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findExact(SearchTerm $searchTerm): array
+    public function findExact(Filter $searchTerm): array
     {
         return $this->createQueryBuilder('user')
             ->andWhere('user.first_name LIKE :value')
-            ->setParameter('value', $searchTerm->getTerm() . '%')
+            ->setParameter('value', $searchTerm->getValue() . '%')
             ->orderBy('user.first_name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param array<Filter> $filters
+     * @return array
+     */
+    public function findExactWithCountry(array $filters): array
+    {
+        $query = $this->createQueryBuilder('user');
+
+        $query->select('users')
+            ->from(User::class, 'users')
+            ->innerJoin('user.address', 'addresses', Join::WITH, 'addresses.user_id = users.id');
+
+        foreach ($filters as $filter) {
+            if ($filter->getName() === 'country') {
+                $query->andWhere('addresses.country = :country')
+                    ->setParameter('country', $filter->getValue());
+
+                continue;
+            }
+
+            $query = $query->andWhere('user.first_name LIKE :value')
+                ->setParameter('value', $filter->getValue() . '%');
+        }
+
+        return $query->orderBy('user.first_name', 'ASC')
             ->getQuery()
             ->getResult();
     }

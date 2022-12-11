@@ -26,7 +26,10 @@ class UserListController extends AbstractController
     public function list(Request $request): JsonResponse
     {
         try {
-            $input = new InputBoundary($request->get('term') ?? '');
+            $term = $request->get('term') ?? '';
+            $country = $request->get('country') ?? '';
+
+            $input = new InputBoundary($term, $country);
             $result = $this->service->handle($input);
             $transformedData = [];
 
@@ -39,6 +42,7 @@ class UserListController extends AbstractController
             ], Response::HTTP_OK);
         } catch (Exception $exception) {
             $this->logger->error('[UserList|API] Something unexpected has happened.', compact('exception'));
+            dd($exception->getMessage());
 
             return new JsonResponse([
                 'errors' => [
