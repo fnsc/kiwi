@@ -1,8 +1,8 @@
 <template>
   <tr>
-    <th scope="col" @click="orderById" class="table-header-clickable">id</th>
-    <th scope="col" @click="orderByName" class="table-header-clickable">Name</th>
-    <th scope="col" @click="orderByEmail" class="table-header-clickable">Email</th>
+    <th scope="col" @click="orderById"><label class="table-header-clickable">id</label></th>
+    <th scope="col" @click="orderByName"><label class="table-header-clickable">Name</label></th>
+    <th scope="col" @click="orderByEmail"><label class="table-header-clickable">Email</label></th>
   </tr>
 </template>
 <script>

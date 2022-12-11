@@ -21,3 +21,7 @@ label {
     font-weight: bold;
     margin-right: 5px;
 }
+
+table {
+    border: 1px solid black !important;
+}

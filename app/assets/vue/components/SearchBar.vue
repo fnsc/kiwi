@@ -2,8 +2,8 @@
   <div class="row mt-5 mb-5">
     <div class="offset-md-3 col-md-6 col-sm-12">
       <form class="d-flex" role="search" @submit.prevent="fetch" @keyup="debouncedFetch">
-        <input class="form-control me-2" type="search" placeholder="Search" autofocus aria-label="Search" v-model="state.searchTerm">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <input class="form-control me-2" type="search" placeholder="Search by name or id" autofocus aria-label="Search" v-model="state.searchTerm">
+        <button class="btn btn-success" type="submit">Search</button>
       </form>
     </div>
   </div>
