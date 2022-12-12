@@ -7,6 +7,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -48,25 +49,7 @@ class UserRepository extends ServiceEntityRepository
      */
     public function findBySearchTerm(array $searchTerms): array
     {
-        $query = $this->createQueryBuilder('user');
-
-        foreach ($searchTerms as $key => $searchTerm) {
-            if ($key === 0) {
-                $query = $query->andWhere('user.first_name LIKE :value')
-                    ->orWhere('user.last_name LIKE :value')
-                    ->setParameter('value', '%' . $searchTerm->getValue() . '%')
-                    ->orWhere('user.id = :value')
-                    ->setParameter('value', $searchTerm->getValue());
-
-                continue;
-            }
-
-            $query = $query->orWhere('user.first_name LIKE :value')
-                    ->orWhere('user.last_name LIKE :value')
-                    ->setParameter('value', '%' . $searchTerm->getValue() . '%')
-                    ->orWhere('user.id = :value')
-                    ->setParameter('value', $searchTerm->getValue());
-        }
+        $query = $this->getQueryBuilder($searchTerms);
 
         return $query->orderBy('user.first_name', 'ASC')
             ->getQuery()
@@ -92,23 +75,57 @@ class UserRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('user');
 
         $query->select('users')
-            ->from(User::class, 'users')
-            ->innerJoin('user.address', 'addresses', Join::WITH, 'addresses.user_id = users.id');
+            ->from(User::class, 'users');
 
         foreach ($filters as $filter) {
             if ($filter->getName() === 'country') {
-                $query->andWhere('addresses.country = :country')
+                $query->innerJoin('user.address', 'addresses', Join::WITH, 'addresses.country = :country')
                     ->setParameter('country', $filter->getValue());
-
-                continue;
             }
-
-            $query = $query->andWhere('user.first_name LIKE :value')
-                ->setParameter('value', $filter->getValue() . '%');
         }
 
         return $query->orderBy('user.first_name', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findBySearchTermAndCountry(array $searchTerms, Filter $country): array
+    {
+        $query = $this->getQueryBuilder($searchTerms);
+
+        return $query->innerJoin('user.address', 'address')
+            ->andWhere('address.country = :value')
+            ->setParameter('value', $country->getValue())
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param array $searchTerms
+     * @return QueryBuilder
+     */
+    private function getQueryBuilder(array $searchTerms): QueryBuilder
+    {
+        $query = $this->createQueryBuilder('user');
+
+        foreach ($searchTerms as $key => $searchTerm) {
+            if ($key === 0) {
+                $query = $query->andWhere('user.first_name LIKE :value')
+                    ->orWhere('user.last_name LIKE :value')
+                    ->setParameter('value', '%' . $searchTerm->getValue() . '%')
+                    ->orWhere('user.id = :value')
+                    ->setParameter('value', $searchTerm->getValue());
+
+                continue;
+            }
+
+            $query = $query->orWhere('user.first_name LIKE :value')
+                ->orWhere('user.last_name LIKE :value')
+                ->setParameter('value', '%' . $searchTerm->getValue() . '%')
+                ->orWhere('user.id = :value')
+                ->setParameter('value', $searchTerm->getValue());
+        }
+
+        return $query;
     }
 }

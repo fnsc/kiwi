@@ -9,7 +9,7 @@ class SearchEnginesManager
 {
     public function __construct(
         private readonly Fuzzy $fuzzy,
-        private readonly OnTarget $onTarget
+//        private readonly OnTarget $onTarget
     ) {
     }
 
@@ -19,10 +19,10 @@ class SearchEnginesManager
      */
     public function search(array $filters): array
     {
-        $onTargetResult = $this->onTarget->find($filters);
+//        $onTargetResult = $this->onTarget->find($filters);
         $fuzzyResult = $this->fuzzy->find($filters);
 
-        return $this->getUniqueResult([...$onTargetResult, ...$fuzzyResult]);
+        return $this->getUniqueResult([...$fuzzyResult]);
     }
 
     private function getUniqueResult(array $searchResults): array

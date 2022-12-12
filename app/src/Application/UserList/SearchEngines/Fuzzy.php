@@ -11,9 +11,21 @@ class Fuzzy
     {
     }
 
-    public function find(Filter $searchTerm): array
+    public function find(array $filters): array
     {
-        $searchTerms = $this->getSearchTerms($searchTerm);
+        $country = null;
+
+        foreach ($filters as $filter) {
+            if ('country' === $filter->getName() && !empty($filter->getValue())) {
+                $country = $filter;
+            }
+        }
+
+        $searchTerms = $this->getSearchTerms($filters[0]);
+
+        if (!empty($country)) {
+            return $this->userRepository->findBySearchTermAndCountry($searchTerms, $country);
+        }
 
         return $this->userRepository->findBySearchTerm($searchTerms);
     }
@@ -32,6 +44,6 @@ class Fuzzy
 
     private function buildSearchTerm(string $term): Filter
     {
-        return new Filter($term);
+        return new Filter('term', $term);
     }
 }
