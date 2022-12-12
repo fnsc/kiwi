@@ -10,7 +10,7 @@ Steps:
    git clone git@github.com:fnsc/kiwi.git
    ```
 1. ```shell
-   docker-compose build web --no-cache
+   docker-compose build --no-cache web
    ```
 1. ```shell
    docker-compose run web composer install
